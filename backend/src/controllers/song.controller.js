@@ -6,15 +6,14 @@ const uploadSong = async(req,res) => {
         
         const {title} = req.body;
 
-        const file = req.file.audio[0];   // this comes form multer
+        const file = req.file;   // this comes form multer
 
-        const audioResponse = await imagekit.upload({    //uploads it to imagekit cloud storage and it returns url
+        const audioResponse = await imageKit.files.upload({    //uploads it to imagekit cloud storage and it returns url
             file: file.buffer.toString("base64"),
             fileName: file.originalname
         })
 
         const song = await songModel.create({
-
             title,
             artist: req.user.id,
             audioUrl : audioResponse.url
@@ -32,4 +31,4 @@ const uploadSong = async(req,res) => {
     }
 }
 
-module.exports = uploadSong
+module.exports = {uploadSong}

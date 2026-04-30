@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 const cors = require('cors')
 const authRoutes = require('./routes/auth.routes')
+const songRoutes = require('./routes/song.routes')
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(cors({              // to connect frontend with backend
 
 app.use(cookieParser());     // to access the token form the cookie(parse cookies) -- req.cookies.token
 app.use('/api/auth', authRoutes)  // setting the prefixes for the routes
+app.use('/api/songs', songRoutes)
 
 //testing route
 app.get('/',(req,res)=>{
