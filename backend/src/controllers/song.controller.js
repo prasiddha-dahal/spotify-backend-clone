@@ -118,4 +118,32 @@ const deleteSong = async(req, res) => {
     }
 }
 
-module.exports = { uploadSong, getAllSongs, getSingleSong, deleteSong }
+
+const searchSong = async(req,res)=> {
+    try{
+        const {q} = req.query;
+
+        if(!q){
+            return res.status(400).json({
+                message: "search query is required"
+            })
+        }
+
+        const songs = await songModel.find({
+            title: {$regex:q,$options:"i"}
+        }).populate("artist","username email");
+
+        res.status(200).json({
+            message: "search results",
+            songs
+        });
+
+
+    }catch(error){
+        res.status(500).json({
+            message: error.message
+        })
+    }
+}
+
+module.exports = { uploadSong, getAllSongs, getSingleSong, deleteSong, searchSong }
