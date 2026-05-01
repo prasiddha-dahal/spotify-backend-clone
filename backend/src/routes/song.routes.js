@@ -1,11 +1,14 @@
 const express = require('express');
 const authMiddleware = require('../middlewares/auth.middleware');
 const isArtist = require('../middlewares/role.middleware');
-const { uploadSong } = require('../controllers/song.controller');
+const { uploadSong, getAllSongs, getSingleSong } = require('../controllers/song.controller');
 const upload = require('../middlewares/upload.middleware')
 const router = express.Router();
 
 router.post('/upload',authMiddleware,isArtist,upload.single('audio'),uploadSong) 
+router.get('/', getAllSongs);           //GET /api/songs/
+router.get('/:id', getSingleSong);    //GET /api/songs/:id
+
 
 //upload.single('audio') its a multer middleware that returns 
 /*
