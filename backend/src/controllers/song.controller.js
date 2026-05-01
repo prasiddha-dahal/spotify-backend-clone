@@ -8,7 +8,7 @@ const uploadSong = async (req, res) => {
 
         const file = req.file;   // this comes form multer
 
-        const audioResponse = await imageKit.files.upload({    //uploads it to imagekit cloud storage and it returns url
+        const audioResponse = await imagekit.files.upload({    //uploads it to imagekit cloud storage and it returns url
             file: file.buffer.toString("base64"),
             fileName: file.originalname
         })
@@ -80,14 +80,14 @@ const getSingleSong = async (req, res) => {
     }
 }
 
-const deleteSong = async(req, res) => {
+const deleteSong = async (req, res) => {
 
     try {
         const { id } = req.params;
 
         const song = await songModel.findById(id);
-        
-        if(!song){
+
+        if (!song) {
             return res.status(404).json({
                 message: "no song found"
             })
@@ -95,11 +95,11 @@ const deleteSong = async(req, res) => {
 
         //check owernship
 
-        if(req.user.id !== song.artist.toString()){
+        if (req.user.id !== song.artist.toString()) {
             return res.status(403).json({
                 message: "unauthorized"
             })
-        }else{
+        } else {
             console.log("authorized")
         }
 
@@ -119,19 +119,19 @@ const deleteSong = async(req, res) => {
 }
 
 
-const searchSong = async(req,res)=> {
-    try{
-        const {q} = req.query;
+const searchSong = async (req, res) => {
+    try {
+        const { q } = req.query;
 
-        if(!q){
+        if (!q) {
             return res.status(400).json({
                 message: "search query is required"
             })
         }
 
         const songs = await songModel.find({
-            title: {$regex:q,$options:"i"}
-        }).populate("artist","username email");
+            title: { $regex: q, $options: "i" }
+        }).populate("artist", "username email");
 
         res.status(200).json({
             message: "search results",
@@ -139,11 +139,28 @@ const searchSong = async(req,res)=> {
         });
 
 
-    }catch(error){
+    } catch (error) {
         res.status(500).json({
             message: error.message
         })
     }
 }
 
-module.exports = { uploadSong, getAllSongs, getSingleSong, deleteSong, searchSong }
+const getMySongs = async (req, res) => {
+    try {
+
+        const songs = await songModel.find({ artist: req.user.id }).populate("artist", "username email");
+
+        res.status(200).json({
+            message: "my songs fetched",
+            songs
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
+module.exports = { uploadSong, getAllSongs, getSingleSong, deleteSong, searchSong ,getMySongs}
