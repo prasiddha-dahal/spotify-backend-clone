@@ -1,4 +1,4 @@
-const imageKit = require('../config/imagekit')
+const imagekit = require('../config/imagekit');
 const songModel = require('../models/song.model')
 
 const uploadSong = async (req, res) => {
@@ -13,10 +13,13 @@ const uploadSong = async (req, res) => {
             fileName: file.originalname
         })
 
+        console.log(audioResponse)
+
         const song = await songModel.create({
             title,
             artist: req.user.id,
-            audioUrl: audioResponse.url
+            audioUrl: audioResponse.url,
+            fileId: audioResponse.fileId
         });
 
         res.status(201).json({
@@ -35,9 +38,9 @@ const getAllSongs = async (req, res) => {
     try {
         const songs = await songModel.find().populate("artist", "username email"); // what populate does here is , we can fetch the 
         //   username and email of the artist who upladed the songs in and array of objects
-        
-        if(!songs){
-            res.status(404).json({
+
+        if (!songs) {
+            return res.status(404).json({
                 message: "song not found"
             })
         }
@@ -59,6 +62,12 @@ const getSingleSong = async (req, res) => {
         const { id } = req.params;
         const song = await songModel.findById(id).populate("artist", "username email")
 
+        if (!song) {
+            return res.status(404).json({
+                message: "no songs found by this id"
+            })
+        }
+
         res.status(200).json({
             message: "song fetched successfully",
             song
@@ -71,4 +80,42 @@ const getSingleSong = async (req, res) => {
     }
 }
 
-module.exports = { uploadSong, getAllSongs, getSingleSong }
+const deleteSong = async(req, res) => {
+
+    try {
+        const { id } = req.params;
+
+        const song = await songModel.findById(id);
+        
+        if(!song){
+            return res.status(404).json({
+                message: "no song found"
+            })
+        }
+
+        //check owernship
+
+        if(req.user.id !== song.artist.toString()){
+            return res.status(403).json({
+                message: "unauthorized"
+            })
+        }else{
+            console.log("authorized")
+        }
+
+        await imagekit.files.delete(song.fileId);   //file id needed to delete it form imagekit 
+
+        await songModel.findByIdAndDelete(id);   //delete form the db
+
+        res.status(200).json({
+            message: "song deleted successfully"
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        })
+    }
+}
+
+module.exports = { uploadSong, getAllSongs, getSingleSong, deleteSong }

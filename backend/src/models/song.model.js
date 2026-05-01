@@ -15,7 +15,13 @@ const songSchema = new mongoose.Schema({
     audioUrl: {
         type: String,
         required: true
+    },
+
+    fileId: {
+        type: String,
+        required: true
     }
+
 },{timestamps : true});
     
 module.exports = mongoose.model("Song", songSchema)
