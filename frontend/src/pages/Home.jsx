@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import API from "../services/api";
 import SongCard from "../components/SongCard";
 import Logout from "../components/Logout";
+import useAuthStore from "../store/useAuthStore";
 
 const Home = () => {
     const [songs, setSongs] = useState([]);
     const [query, setQuery] = useState("");
+
+    const {user} = useAuthStore()
 
     const fetchSongs = async () => {
         try {
@@ -40,7 +43,10 @@ const Home = () => {
 
     return (
         <div className="p-5">
-            <h1 className="text-3xl font-bold mb-4">Songs</h1>
+            <div className="flex justify-between mb-6">
+            <h1 className="text-3xl font-bold">Songs</h1>
+            <p className="text-sm text-gray-300" > Welcome {user.username.toUpperCase()}</p>
+            </div>
 
             <input
                 type="text"
