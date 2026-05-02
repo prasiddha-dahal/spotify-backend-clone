@@ -49,7 +49,7 @@ const ArtistDashboard = () => {
 
             <div className="flex justify-between mb-6">
             <h1 className="text-2xl text-center font-bold mb-4"> Artist Dashboard</h1>
-            <p className="text-gray-400 mb-6 text-sm">Welcome {user.username.toUpperCase()}</p>
+            <p className="text-gray-400 mb-6 text-sm">Welcome {user?.username.toUpperCase()}</p>
             </div>
 
             <form onSubmit={handleUpload} className="border p-4 mb-6 rounded-lg">

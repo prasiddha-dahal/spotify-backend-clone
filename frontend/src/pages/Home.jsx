@@ -45,7 +45,7 @@ const Home = () => {
         <div className="p-5">
             <div className="flex justify-between mb-6">
             <h1 className="text-3xl font-bold">Songs</h1>
-            <p className="text-sm text-gray-300" > Welcome {user.username.toUpperCase()}</p>
+            <p className="text-sm text-gray-300" > Welcome {user?.username.toUpperCase()}</p>
             </div>
 
             <input
