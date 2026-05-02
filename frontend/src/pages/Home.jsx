@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
 import SongCard from "../components/SongCard";
+import Logout from "../components/Logout";
 
 const Home = () => {
     const [songs, setSongs] = useState([]);
@@ -59,6 +60,7 @@ const Home = () => {
                     <p className="text-gray-500">No songs found</p>
                 )}
             </div>
+            <Logout />
         </div>
     );
 };

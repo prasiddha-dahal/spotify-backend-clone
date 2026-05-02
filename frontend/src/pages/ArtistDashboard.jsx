@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
+import Logout from "../components/Logout";
 
 const ArtistDashboard = () => {
     const [songs, setSongs] = useState([]);
@@ -87,6 +88,7 @@ const ArtistDashboard = () => {
                     </div>
                 ))}
             </div>
+            <Logout />
         </div>
     );
 };

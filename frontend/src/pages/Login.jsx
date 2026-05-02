@@ -32,7 +32,7 @@ const Login = () => {
                 onSubmit={handleSubmit}
                 className="border p-6 rounded-lg w-80"
             >
-                <h1 className="text-xl font-bold mb-4">Login</h1>
+                <h1 className="text-xl font-bold mb-4 text-center">Login</h1>
 
                 <input
                     name="identifier"
@@ -49,7 +49,7 @@ const Login = () => {
                     className="border w-full mb-3 p-2"
                 />
 
-                <button className="bg-black text-white w-full p-2">
+                <button className="bg-green-500 rounded-lg w-full p-2 transition-all hover:bg-green-700 cursor-pointer">
                     Login
                 </button>
             </form>
