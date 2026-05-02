@@ -36,8 +36,9 @@ const uploadSong = async (req, res) => {
 
 const getAllSongs = async (req, res) => {
     try {
-        const songs = await songModel.find().populate("artist", "username email"); // what populate does here is , we can fetch the 
+        const songs = await songModel.find().limit(3).populate("artist", "username email"); // what populate does here is , we can fetch the 
         //   username and email of the artist who upladed the songs in and array of objects
+        //   limit(3) only fetch 3 songs form the db
 
         if (!songs) {
             return res.status(404).json({
