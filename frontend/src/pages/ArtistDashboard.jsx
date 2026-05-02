@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import API from "../services/api";
+import API from "../services/api"; 
 import Logout from "../components/Logout";
+import useAuthStore from "../store/useAuthStore";
 
 const ArtistDashboard = () => {
     const [songs, setSongs] = useState([]);
     const [title, setTitle] = useState("");
     const [file, setFile] = useState(null);
+    const {user} = useAuthStore();
 
     const fetchSongs = async () => {
         const res = await API.get("/songs/my-songs");
@@ -14,6 +16,7 @@ const ArtistDashboard = () => {
 
     useEffect(() => {
         fetchSongs();
+        console.log(user)
     }, []);
 
     const handleUpload = async (e) => {
@@ -44,16 +47,16 @@ const ArtistDashboard = () => {
     return (
         <div className="p-5">
 
-            {/* UPLOAD FORM */}
             <h1 className="text-2xl text-center font-bold mb-4"> Artist Dashboard</h1>
+            <p className="text-gray-400 mb-6 text-sm">Welcome {user.username.toUpperCase()}</p>
 
-            <form onSubmit={handleUpload} className="border p-4 mb-6">
+            <form onSubmit={handleUpload} className="border p-4 mb-6 rounded-lg">
                 <input
                     type="text"
                     placeholder="Song title"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="border p-2 w-full mb-2"
+                    className="border p-2 w-full mb-2 rounded-lg"
                 />
 
                 <input
@@ -68,20 +71,19 @@ const ArtistDashboard = () => {
                 </button>
             </form>
 
-            {/* SONG LIST */}
             <h2 className="text-xl font-semibold mb-2">Your Songs</h2>
 
             <div className="grid gap-3">
                 {songs.map((song) => (
-                    <div key={song._id} className="border p-3 flex justify-between">
+                    <div key={song._id} className="border p-3 flex justify-between rounded-lg">
                         <div>
                             <p className="font-bold">{song.title}</p>
-                            <audio controls src={song.audioUrl}></audio>
+                            <audio className="rounded-lg" controls src={song.audioUrl}></audio>
                         </div>
 
                         <button
                             onClick={() => handleDelete(song._id)}
-                            className="bg-red-500 text-white px-3 py-1"
+                            className="bg-red-500 text-white rounded-lg px-3"
                         >
                             Delete
                         </button>
