@@ -1,5 +1,5 @@
+require('dotenv').config()
 // turning raw incoming data into usable JavaScript objects
-
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const cors = require('cors')
@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json())  // to access the req.body -- parse json body
 
 app.use(cors({              // to connect frontend with backend
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL, 
     credentials: true
 }));
 
